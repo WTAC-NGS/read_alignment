@@ -414,18 +414,19 @@ There are no questions in this section.
     \hypertarget{performing-read-alignment}{%
 \section{Performing Read Alignment}\label{performing-read-alignment}}
 
-\textbf{1.} 145441459
+\textbf{1.} 145,441,459
 
 \textbf{2.} The sam is \textasciitilde{} 157M and the bam is
 \textasciitilde{} 25M
 
-\textbf{3.} 67,461 (17.2\%) or 359 + (33551 * 2)
+\textbf{3.} 67,461 (17.2\%). This is the number of unpaired read dups 
+(359) + the number of paired read dups (33551 * 2)
 
 \textbf{4.} 392,820
 
-\textbf{5.} 391603/392820 (99.7\%)
+\textbf{5.} 391,603/392,820 (99.7\%)
 
-\textbf{6.} 389410
+\textbf{6.} 389,410
 
 \textbf{7.} 0
 
@@ -454,7 +455,7 @@ reads.
 The third mutation is a bit harder to spot, because it's bigger than the
 read length (so no single read will span it). Look first at the coverage
 track, and notice a sharp coverage drop between chr7:87,483,833 and
-chr7:87,484,169. That suggests that one of the two alleles have been
+chr7:87,484,169. This suggests that one of the two alleles has been
 deleted across that position. Notice also the soft-clipping of some
 reads ``entering'' chr7:87,483,833 from the left, and the same
 softclipping of reads entering chr7:87,484,169 from the right. This
@@ -486,16 +487,16 @@ area.
 read group to the header of the BAM file
 
 \textbf{2.} -b means create a BAM as output and -S indicates that the
-input files is a SAM file. The -S option is now ignored by samtools as
-it can now autodetect the input file type.
+input file is a SAM file. The -S option is now ignored by samtools as
+it can autodetect the input file type.
 
-\textbf{3.} 397506
+\textbf{3.} 397,506
 
-\textbf{4.} 303036/397506 (76.2\%)
+\textbf{4.} 303,036/397,506 (76.2\%)
 
-\textbf{5.} 282478
+\textbf{5.} 282,478
 
-\textbf{6.} 2239
+\textbf{6.} 2,239
 
 \textbf{7.} 275.9 (mean) and 47.7 (standard deviation)
 
@@ -505,23 +506,23 @@ it can now autodetect the input file type.
 
 \textbf{10.}
 
-bwa mem -M -R
+\texttt{bwa mem -M -R
 "@RG\textbackslash tID:lane2\textbackslash tSM:60A\_Sc\_DBVPG6044"
 ../../../../ref/Saccharomyces\_cerevisiae.R64-1-1.dna.toplevel.fa.gz
 s\_7\_1.fastq.gz s\_7\_2.fastq.gz \textbar{} samtools view -bS -
-\textbar{} samtools sort -T temp -O bam -o lane1.sorted.bam -
+\textbar{} samtools sort -T temp -O bam -o lane2.sorted.bam -}
 
 \textasciitilde22M
 
 Merge:
-\textasciitilde/course\_data/read\_alignment/data/Exercise2/60A\_Sc\_DBVPG6044/library1\$
-picard MergeSamFiles -I lane1/lane1.sorted.bam -I lane2/lane1.sorted.bam
--O library1.bam
+\texttt{\textasciitilde/course\_data/read\_alignment/data/Exercise2/60A\_Sc\_DBVPG6044/library1\$
+picard MergeSamFiles -I lane1/lane1.sorted.bam -I lane2/lane2.sorted.bam
+-O library1.bam}
 
 Markdup:
-\textasciitilde/course\_data/read\_alignment/data/Exercise2/60A\_Sc\_DBVPG6044/library1\$
+\texttt{\textasciitilde/course\_data/read\_alignment/data/Exercise2/60A\_Sc\_DBVPG6044/library1\$
 picard MarkDuplicates -I library1.bam -O library1.markdup.bam -M
-library1.metrics.txt
+library1.metrics.txt}
 
 \textbf{11.} 12399 or 3115 + (4642 * 2) = unpaired read dups + (paired
 read dups *2)
@@ -548,7 +549,7 @@ read dups *2)
 \textbf{8.} A deletion. This is unlikely to be a true variant and may be
 due to misalignment due the run of T's in the flanking region.
 
-\textbf{9.} The following command procuces a cram file which should be
+\textbf{9.} The following command produces a CRAM file which should be
 \textasciitilde29MB in size.
 
 \texttt{samtools\ view\ -C\ -T\ ../../../ref/Saccharomyces\_cerevisiae.R64-1-1.dna.toplevel.fa\ -o\ library1.markdup.cram\ library1.markdup.bam}

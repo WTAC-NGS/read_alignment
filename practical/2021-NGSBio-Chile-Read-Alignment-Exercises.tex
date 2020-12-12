@@ -433,12 +433,11 @@ against a reference genome:
 \item
   Variation from the reference -- could have functional consequence.
 \item
-  Transcript abundance: Instead of a microarray, you could use alignment
-  to genome to quantify expression: more sensitive
+  Transcript abundance: The number of aligned reads within genes can
+  be used to quantify expression.
 \item
-  Ab-initio transcript discovery: you can see a pileup from RNA seq data
-  showing evidence for an exon which was previously missed or an exon
-  which is being skipped in a transcript.
+  Ab-initio transcript discovery: you can see a pileup from RNA-seq data
+  showing evidence for an exon which was previously missed.
 \end{itemize}
 
     \begin{figure}
@@ -450,23 +449,17 @@ against a reference genome:
     \hypertarget{learning-outcomes}{%
 \subsection{Learning outcomes}\label{learning-outcomes}}
 
-On completion of the tutorial, you can expect to be able to:
+On completion of the tutorial, you should be able to:
 
 \begin{itemize}
 \tightlist
 \item
-  Perform read alignment using standard tools (BWA-MEM)
+  Perform read alignment using standard tools (BWA-MEM).
 \item
-  Perform the following task and understand their effect on analysis
-  results
-
-  \begin{itemize}
-  \tightlist
-  \item
-    Mark Duplicates
-  \end{itemize}
+  Be able to mark duplicate reads and understand their effect on analysis
+  results.
 \item
-  Visualise read alignments using IGV (Integrated Visualisation Tool)
+  Visualise read alignments using IGV (Integrated Visualisation Tool).
 \end{itemize}
 
 If there is time you will learn how to:
@@ -475,7 +468,7 @@ If there is time you will learn how to:
 \tightlist
 \item
   Merge the results from multiple alignments and understand when it is
-  appropriate to perform a merge
+  appropriate to perform a merge.
 \end{itemize}
 
 \hypertarget{tutorial-sections}{%
@@ -485,8 +478,8 @@ This tutorial comprises the following sections:\\
 1. \href{alignment.ipynb}{Performing read alignment}\\
 2. \href{visualisation.ipynb}{Alignment visualisation}
 
-There is also an additional (optional) section: 3.
-\href{workflows.ipynb}{Alignment workflows}
+There is also an additional (optional) section: \\
+3. \href{workflows.ipynb}{Alignment workflows}
 
 \hypertarget{authors}{%
 \subsection{Authors}\label{authors}}
@@ -556,7 +549,7 @@ igv
 
     This should return the help message for samtools, bwa and Picard tools
 respectively. The final command should launch the genome viewer IGV. You
-can close the IGV software, we will use it later in this tutorial to
+can close the IGV software for now; we will use it later in this tutorial to
 visualise alignments.
 
 To get started with the tutorial, head to the first section:
@@ -577,11 +570,11 @@ To get started with the tutorial, head to the first section:
 \section{Performing Read Alignment}\label{performing-read-alignment}}
 
 Here we will use the BWA aligner to align a small set of Illumina
-sequencing data to the \textit{Mus Musculus} reference genome. We will
+sequencing reads to the \textit{Mus Musculus} reference genome. We will
 align genomic sequence (from Whole-Genome Sequencing) from a mouse
-embryo which has been mutagenised while the one-cell stage using
+embryo that was mutagenised at the one-cell stage using
 CRISPR-Cas9 and a gRNA targeting an exon of the Tyr gene. The successful
-mutation of the gene will delete one or both alleles. A bi-allelic null
+mutation of the gene results in the deletion one or both alleles. A bi-allelic null
 Tyr mouse will be albino, but otherwise healthy.
 
 First, check you are in the correct directory.
@@ -601,8 +594,8 @@ First, check you are in the correct directory.
 \subsection{Viewing the reference
 genome}\label{viewing-the-reference-genome}}
 
-Go to the \texttt{ref} directory that contains the fasta files of the
-reference genomes:
+Go to the \texttt{ref} directory, which contains the fasta files of the
+reference genome:
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{ }{\boxspacing}
@@ -612,7 +605,7 @@ reference genomes:
 \end{tcolorbox}
 
     Fasta files (.fa) are used to store raw sequencing information before
-aligning data. A single chromosome from the mouse genome is contained in
+the data has been aligned. A single chromosome from the mouse genome is contained in
 the file GRCm38.68.dna.toplevel.chr7.fa.gz
 
 View the file with zless (we use zless instead of less because the file
@@ -625,8 +618,8 @@ zless GRCm38.68.dna.toplevel.chr7.fa.gz
 \end{Verbatim}
 \end{tcolorbox}
 
-    \textbf{Q1: What is the length of chromosome 7 of the mouse genome?
-(Hint: Look at the fasta header for chromosome 7)}
+    \textbf{Q1: What is the length of chromosome 7 of the mouse genome?}
+(Hint: Look at the fasta header for chromosome 7)
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{ }{\boxspacing}
@@ -635,9 +628,8 @@ zless GRCm38.68.dna.toplevel.chr7.fa.gz
 \end{Verbatim}
 \end{tcolorbox}
 
-    Similar to a BAM file, to allow fast retrieval of data, an index file is
-often required. You should check for the presence of fasta indexes for
-the genome in the `ref' directory:
+    Similar to a BAM file, an index file is required to allow fast retrieval of data,
+You should check for the presence of fasta indexes for the genome in the `ref' directory:
 
 \texttt{GRCm38.68.dna.toplevel.chr7.fa.gz.amb\ ...\ GRCm38.68.dna.toplevel.chr7.fa.gz.sa}
 
@@ -667,7 +659,7 @@ directory - you can use this command:
 
     Use the \texttt{bwa\ mem} command to align the fastq files to the mouse
 reference genome. By default bwa outputs SAM format directly to the
-standard output (in this case your terminal window), therefore you will
+standard output (in this case your terminal window); therefore you will
 have to redirect the result into a SAM file.
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
@@ -684,7 +676,9 @@ bwa mem ../../ref/GRCm38.68.dna.toplevel.chr7.fa.gz md5638a\PYZus{}7\PYZus{}8700
 file}\label{convert-a-sam-file-to-a-bam-file}}
 
 Now use samtools to convert the SAM file \texttt{md5638.sam} created in
-the previous step into a BAM file called \texttt{md5638.bam}.
+the previous step into a BAM file called \texttt{md5638.bam}. Remember
+you can run \texttt{samtools view} to display the help and check what the
+different options mean.
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{ }{\boxspacing}
@@ -721,12 +715,12 @@ samtools sort \PYZhy{}T temp \PYZhy{}O bam \PYZhy{}o md5638.sorted.bam md5638.ba
 \end{Verbatim}
 \end{tcolorbox}
 
-    Finally index the sorted BAM file using `samtools index' command.
+    Finally index the sorted BAM file using \texttt{samtools index} command.
 
 \textbf{Note:} indexing a BAM file is also a good way to check that the
 BAM file has not been truncated (e.g.~your disk becomes full when
 writing the BAM file). At the end of every BAM file, a special end of
-file (EOF) marker is written. The Samtools index command will first
+file (EOF) marker is written. The samtools index command will first
 check for this and produce an error message if it is not found.
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
@@ -744,9 +738,8 @@ To produce the sorted BAM file above we had to carry out several
 separate commands and produce intermediate files. The Unix pipe command
 allows you to feed the output of one command into the next command.
 
-You can combine all of these commands together using unix pipes, and do
-all of this data processing together and avoid writing intermediate
-files. To do this type:
+You can combine all of these commands together using unix pipes, and
+avoid writing intermediate files. To do this type:
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{ }{\boxspacing}
@@ -772,7 +765,7 @@ symbol).}
     \hypertarget{mark-pcr-duplicates}{%
 \subsection{Mark PCR Duplicates}\label{mark-pcr-duplicates}}
 
-We will use a program called `MarkDuplicates' that is part of Picard
+We will use a program called \texttt{MarkDuplicates} that is part of Picard
 tools (http://picard.sourceforge.net) to remove PCR duplicates that may
 have been introduced during the library construction stage. To find the
 options for `MarkDuplicates' -- type:
@@ -852,15 +845,15 @@ Now look at the output and answer the following questions:
 
 \textbf{Q8: What is the insert size mean and standard deviation?}
 
-In your web browser open the file called md5638\_plot.html to view the
-QC information and anser the following questions:
+In your web browser open the file called \texttt{md5638\_plot/index.html} to view the
+QC information and answer the following questions:
 
 \textbf{Q9: How many reads have zero mapping quality?}
 
-\textbf{Q10: Which of the first fragments or second fragments are higher
+\textbf{Q10: Which of the first or second reads in the fragment are higher
 base quality on average?}
 
-    Congratulations you have succesfully aligned some NGS data to a
+    \textbf{Congratulations}, you have succesfully aligned some NGS data to a
 reference genome! Now continue to the next section of the tutorial:
 \href{visualisation.ipynb}{Alignment visualisation}.
 
@@ -882,8 +875,7 @@ You have now made it to the interesting part!
 
 Integrative Genome Viewer (IGV) \url{http://www.broadinstitute.org/igv/}
 allows you to visualise genomic datasets and is a very useful tool for
-looking at the alignment of reads onto a reference genome from BAM
-files.
+looking at the alignment of reads onto a reference genome.
 
 Start IGV by typing:
 
@@ -919,7 +911,7 @@ drop-down box'' on the toolbar.
 
 \textbf{Go to ' \textit{Genomes -\textgreater{} Load Genome From
 Server\ldots{}} ' and select ``Mouse mm10''. This is a synonym for
-GRCm38, which is the current mouse assembly (reference genome)}
+GRCm38, which is the current mouse assembly (reference genome).}
 
     \begin{figure}
 \centering
@@ -942,7 +934,7 @@ Once the genome has loaded, the chromosomes will be shown on the
 selected, a red box will appear. This represents the visible region of
 the genome.
 
-Above the genome ruler is the \textbf{toolbar} which has a variety
+Above the genome ruler is the \textbf{toolbar} which has a variety of
 controls for navigating the genome:
 
 \begin{itemize}
@@ -982,11 +974,12 @@ portion of the genome.
 
 The \textbf{sequence viewer} shows the genome at the single nucleotide
 level. You won't be able to see the sequence until you are zomed in.
-Let's try it, select the zooom in (+) option in the top right of the
-screeen. As you start to zoom in (+), you will see that each nucleotide
-is represented by a coloured bar (red=T, yellow=G, blue=C and green=A).
-This makes it easier to spot repetitive regions in the genome. Carry on
-zooming in (+) and you will see the individual nucleotides.
+Let's try it, select any chromosome and then click on the zooom in (+) 
+option in the top right of the screeen. As you start to zoom in (+), 
+you will see that each nucleotide is represented by a coloured bar 
+(red=T, yellow=G, blue=C and green=A). This makes it easier to spot 
+repetitive regions in the genome. Carry on zooming in (+) and you will 
+see the individual nucleotides.
 
     \begin{figure}
 \centering
@@ -1009,7 +1002,7 @@ There are several views in IGV
   Region view
 \end{itemize}
 
-There are several ways to to zoom in and out to these views to look at
+There are several ways to zoom in and out in these views, to look at
 specific regions or base level information.
 
     \hypertarget{whole-genome-view}{%
@@ -1155,13 +1148,17 @@ this position in IGV here.
 \subsubsection{Viewing individual read alignment
 information}\label{viewing-individual-read-alignment-information}}
 
-Read are represented by grey or transparent/white bars which are stacked
+Reads are represented by grey or transparent/white bars that are stacked
 together where they align to the reference genome. Reads are pointed to
 indicate the orientation in which they mapped i.e.~on the forward or
 reverse strand. Hovering over an individual read will display
 information about its alignment.
 
-(images/igv-read-information.png ``IGV - read information'')
+    \begin{figure}
+\centering
+\includegraphics{images/igv-read-information.png}
+\caption{IGV - read information}
+\end{figure}
 
 Mismatches occur where the nucleotide in the aligned read is not the
 same as the nucleotide in that position on the reference genome. A
@@ -1175,10 +1172,14 @@ read. The colour of the bar represents the mismatched base in the read
 \caption{IGV - mismatch}
 \end{figure}
 
+The transparency of the color reflects the quality of the base. Thus, 
+solid color indicates that the mismatch is unlikely to be a sequencing error, 
+whereas lighter coloured mismatches correspond to low-quality base calls.
+
     \hypertarget{igv-configuration}{%
 \subsection{IGV configuration}\label{igv-configuration}}
 
-Follow the instructions that follow to set up your IGV view:
+Now, follow these instructions to set up your IGV view:
 
 \textbf{Select the little yellow ``speech bubble'' icon in the toolbar
 and set the option to ``Show Details on Click'' (or you will go mad, I
@@ -1243,7 +1244,7 @@ read itself.}
   coverage across this region? (\textbf{Hint:} Look at the coverage
   track)
 \item
-  Can you spot the three mutant variants (two small and one larger) in
+  Can you spot the three mutant variants (two small and one large) in
   this region? State what the evidence is for them?
 \end{enumerate}
 
@@ -1258,10 +1259,9 @@ read itself.}
   Hint2: Look around 87,483,960 for a deletion. How large is it? How
   many reads does it occur in?
 \item
-  Hint3: Zoom out slightly and watch the coverage track between
+  Hint3: Zoom out slightly and look at the coverage track between
   87,483,700 - 87,484,200. Once you've spotted the large change look at
-  reference sequence the edges of the mutation to hazard a guess as to
-  its mechanism.
+  reference sequence on the edges of the mutation.
 \end{itemize}
 
 \begin{enumerate}
@@ -1273,7 +1273,7 @@ read itself.}
   mutations present?
 \end{enumerate}
 
-    \textbf{Congratulations} you have completed the Read Alignment tutorial.
+    \textbf{Congratulations}, you have completed the Read Alignment tutorial.
 If you have time left then continue to the next (optional) section of
 the tutorial: \href{workflows.ipynb}{Alignment workflows}.
 
@@ -1297,10 +1297,10 @@ it useful to look at it after the course.
     \hypertarget{ngs-workflows}{%
 \section{NGS Workflows}\label{ngs-workflows}}
 
-A typical NGS experiment involves more than one sample, potential 10's
+A typical NGS experiment involves more than one sample, potentially 10's
 or 100's of samples. During the experiment, a sample may be split across
-multiple libraries and and a library may be split across multiple
-sequencing runs (lanes). For example, you may have to increase the
+multiple libraries and a library may be split across multiple
+sequencing lanes. For example, you may have to increase the
 number of runs for a specific sample to increase the read-depth
 (sequencing volume), so you have to prepare multiple libraries.
 
@@ -1312,8 +1312,8 @@ important to perform de-duplication on the merged data. The main purpose
 of removing duplicates is to mitigate the effects of PCR amplification
 bias introduced during library construction. PCR duplicates erroneously
 inflate the coverage and, if not removed, can give the illusion of high
-confidence when it is not really there which can have an effect on
-downstream analysis such as variant calling.
+confidence when it is not really there. This can have an effect on
+downstream analyses such as variant calling.
 
 The figure below outlines a typical NGS workflow:
 
@@ -1411,7 +1411,7 @@ samtools index lane1.sorted.bam
     \hypertarget{generate-qc-stats}{%
 \subsubsection{Generate QC stats}\label{generate-qc-stats}}
 
-Now use samtools to collect some statistics and generate QC plots from
+Next, use samtools to collect some statistics and generate QC plots from
 the alignment in the BAM file. Type the commands:
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
@@ -1424,7 +1424,7 @@ samtools stats lane1.sorted.bam \PYZgt{} lane1.stats.txt
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{ }{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-plot\PYZhy{}bamstats \PYZhy{}p plot/ lane1.stats.txt
+plot\PYZhy{}bamstats \PYZhy{}p plots/ lane1.stats.txt
 \end{Verbatim}
 \end{tcolorbox}
 
@@ -1440,7 +1440,7 @@ plot\PYZhy{}bamstats \PYZhy{}p plot/ lane1.stats.txt
 
 \textbf{Q7:} What is the insert size mean and standard deviation?
 
-In a web browser open the file called plots.html to view the QC
+In a web browser open the file called \texttt{plots/index.html} to view the QC
 information.
 
 \textbf{Q8:} How many reads have zero mapping quality?
@@ -1511,11 +1511,10 @@ ls
 \end{Verbatim}
 \end{tcolorbox}
 
-    You will notice that there are two directories called \texttt{lane1} and
-\texttt{lane2}. There were two sequencing lanes produced from this
-sequencing library. In order to mark library PCR duplicates, we need to
-merge the two lane BAM files together to produce a single BAM file. We
-will use the picard tool called `MergeSamFiles'
+    We've seen that there are two directories called \texttt{lane1} and
+\texttt{lane2} that correspond to the two sequencing lanes produced from this
+sequencing library. In order to mark library PCR duplicates, we first need to
+merge the two lane BAM files. We will use the picard tool called `MergeSamFiles'
 (http://picard.sourceforge.net) to merge the lane BAM files.
 
 To find the options for `MergeSamFiles' command, type:
@@ -1579,7 +1578,7 @@ were marked as duplicates?
 \subsection{Visualise the alignment}\label{visualise-the-alignment}}
 
 Go to the directory containing the reference genome and uncompress the
-file as IGV cannot read a compressed file.
+file, as IGV cannot read a compressed file.
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{ }{\boxspacing}
@@ -1650,8 +1649,8 @@ library BAM file that you created in the previous step.}
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
-  Go to Chromosome IV and position 764,292. (\textbf{Hint: use the
-  navigation bar across the top})
+  Go to Chromosome IV and position 764,292. (Hint: use the
+  navigation bar across the top)
 \item
   What is the reference base at this position?
 \item
@@ -1674,7 +1673,7 @@ library BAM file that you created in the previous step.}
   Convert the BAM file to a CRAM file
 \end{enumerate}
 
-    You have reached the end of the Read Alignment tutorial.
+    \textbf{Congratulations}, you have reached the end of the Alignment Workflows tutorial!!
 
 
     % Add a bibliography block to the postdoc
